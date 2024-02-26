@@ -15,6 +15,6 @@ public enum Autorizacao implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return nome;
+        return name();
     }
 }

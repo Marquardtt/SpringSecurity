@@ -4,8 +4,13 @@ import com.teste.model.*;
 import com.teste.repository.UsuarioRepository;
 import jakarta.annotation.*;
 import lombok.*;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.util.List;
 
 @AllArgsConstructor
+@Configuration
 public class DatabaseConfig {
 
     private final UsuarioRepository usuarioRepository;
@@ -22,7 +27,8 @@ public class DatabaseConfig {
                         .accountNonLocked(true)
                         .credentialsNonExpired(true)
                         .username("teste@gmail.com")
-                        .password("teste123")
+                        .password(new BCryptPasswordEncoder().encode("teste123"))
+                        .authorities(List.of(Autorizacao.GET))
                         .build());
         usuarioRepository.save(usuario);
     }

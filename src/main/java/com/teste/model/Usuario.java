@@ -17,5 +17,6 @@ public class Usuario {
     private String username;
     @OneToOne(cascade = CascadeType.ALL)
     @JsonIgnore
+    @ToString.Exclude
     private UsuarioDetailsEntity usuarioDetailsEntity;
 }
