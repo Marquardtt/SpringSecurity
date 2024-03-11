@@ -1,12 +1,15 @@
 package com.teste.configuration;
 
+import com.teste.FiltroAutenticacao;
 import lombok.*;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextRepository;
 
 @Configuration
@@ -14,6 +17,7 @@ import org.springframework.security.web.context.SecurityContextRepository;
 public class ApiConfig {
 
     private SecurityContextRepository repo;
+    private final FiltroAutenticacao filtroAutenticacao;
 
     @Bean
     //Filtro de authority
@@ -33,11 +37,16 @@ public class ApiConfig {
                 //Caso nenhuma verificação seja concluida ele permite as requisições caso o usuário seja autenticado
                 .anyRequest().authenticated());
 
-        //Manter a seção usuário ativa, sem que ele precise logar novamente a cada requisição
-        httpSecurity.securityContext((context) -> context.securityContextRepository(repo)
-        );
         //Gera um formulario de Login
         httpSecurity.formLogin(Customizer.withDefaults());
+
+        //Não salva a seção de usuario
+        httpSecurity.sessionManagement(config->{
+            config.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        });
+
+        //Faz com que o filtro seja adicinado na lista de filtros que são utilizados antes de cada requisição
+        httpSecurity.addFilterBefore(filtroAutenticacao, UsernamePasswordAuthenticationFilter.class);
 
         //Gera uma forma de executar o Logout
         httpSecurity.logout(Customizer.withDefaults());

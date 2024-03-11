@@ -10,6 +10,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 @AllArgsConstructor
 @Configuration
@@ -31,5 +35,13 @@ public class BeanConfigs {
     @Bean
     public SecurityContextRepository securityContextRepository(){
         return new HttpSessionSecurityContextRepository();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfig(){
+        CorsConfiguration corsConfig = new CorsConfiguration();
+        corsConfig.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfig.setAllowedMethods(List.of("POST", "GET"));
+        corsConfig.setAllowCredentials(true);
     }
 }

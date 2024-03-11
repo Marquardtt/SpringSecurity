@@ -31,7 +31,8 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     private AutenticacaoService autenticacaoService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        //Coloca o cookie capturado em uma variavel Cookie
+        if(!rotaPublica(request)){
+            //Coloca o cookie capturado em uma variavel Cookie
         Cookie cookie = cookieUtil.getCookie(request, "JWT");
         String token = cookie.getValue();
         String username = jwUtil.getUsername(token);
@@ -41,10 +42,10 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
 
         //Salvaldo o usuario autenticado no security context
-            SecurityContext context = SecurityContextHolder.createEmptyContext();
-            context.setAuthentication(authentication);
-            securityContextRepository.saveContext(context, request, response);
-
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authentication);
+        securityContextRepository.saveContext(context, request, response);
+    }
             //Continuação da requisição
         filterChain.doFilter(request, response);
     }
