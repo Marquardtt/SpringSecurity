@@ -18,14 +18,12 @@ public class BeanConfigs {
     private final AutenticacaoService autenticacaoService;
 
 
+
     @Bean
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
-    @Bean
+
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-//        dao.setPasswordEncoder(new BCryptPasswordEncoder());
+        dao.setPasswordEncoder(new BCryptPasswordEncoder());
         dao.setUserDetailsService(autenticacaoService);
         return new ProviderManager(dao);
     }

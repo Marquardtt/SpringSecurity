@@ -16,6 +16,7 @@ public class DatabaseConfig {
     private final UsuarioRepository usuarioRepository;
 
     @PostConstruct
+    //Cria um usuário com as informações para que ele seja criado
     public void init(){
         Usuario usuario = new Usuario();
         usuario.setUsername("Teste");
@@ -27,6 +28,7 @@ public class DatabaseConfig {
                         .accountNonLocked(true)
                         .credentialsNonExpired(true)
                         .username("teste@gmail.com")
+                        //Faz a encriptação da senha
                         .password(new BCryptPasswordEncoder().encode("teste123"))
                         .authorities(List.of(Autorizacao.GET))
                         .build());

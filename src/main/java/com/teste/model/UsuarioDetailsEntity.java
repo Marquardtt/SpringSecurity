@@ -14,6 +14,9 @@ import java.util.Collection;
 @AllArgsConstructor
 @Builder
 
+//Cria uma classe para implementar os atributos da UserDetails, que são necessarios para o resto da parada funcionar.
+//Tambem é possivel implementar a UserDetails diretamente na classe pad
+
 public class UsuarioDetailsEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

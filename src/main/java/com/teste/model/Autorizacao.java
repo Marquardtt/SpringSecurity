@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 
 @AllArgsConstructor
+//Descreve as autorizações do sistema
 public enum Autorizacao implements GrantedAuthority {
 
     GET("Get"),
