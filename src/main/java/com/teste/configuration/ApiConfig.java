@@ -33,14 +33,12 @@ public class ApiConfig {
 
                 //Permite todas as requisições para este url
                 .requestMatchers(HttpMethod.GET, "/teste/users").permitAll()
-
+                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                 //Caso nenhuma verificação seja concluida ele permite as requisições caso o usuário seja autenticado
                 .anyRequest().authenticated());
 
-        //Gera um formulario de Login
-        httpSecurity.formLogin(Customizer.withDefaults());
-
         //Não salva a seção de usuario
+        httpSecurity.formLogin(AbstractHttpConfigurer::disable);
         httpSecurity.sessionManagement(config->{
             config.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         });

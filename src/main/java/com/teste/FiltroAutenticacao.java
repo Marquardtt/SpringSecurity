@@ -2,7 +2,7 @@ package com.teste;
 
 import com.teste.service.AutenticacaoService;
 import com.teste.utils.CookieUtil;
-import com.teste.utils.JwUtil;
+import com.teste.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -14,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,7 +26,7 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     private SecurityContextRepository securityContextRepository;
 
     private final CookieUtil cookieUtil = new CookieUtil();
-    private final JwUtil jwUtil = new JwUtil();
+    private final JwtUtil jwtUtil = new JwtUtil();
     private AutenticacaoService autenticacaoService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -35,7 +34,7 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
             //Coloca o cookie capturado em uma variavel Cookie
         Cookie cookie = cookieUtil.getCookie(request, "JWT");
         String token = cookie.getValue();
-        String username = jwUtil.getUsername(token);
+        String username = jwtUtil.getUsername(token);
 
         //Criacao do usuario autenticado
         UserDetails userDetails = autenticacaoService.loadUserByUsername(username);
@@ -51,6 +50,6 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     }
 
     private boolean rotaPublica(HttpServletRequest request){
-        return request.getRequestURI().equals("/login") && request.getMethod().equals("POST");
+        return request.getRequestURI().equals("/auth/login") && request.getMethod().equals("POST");
     }
 }
