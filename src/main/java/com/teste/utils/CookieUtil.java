@@ -26,9 +26,14 @@ public class CookieUtil {
     }
 
 
-    public Cookie getCookie(HttpServletRequest request, String name){
+    public Cookie getCookie(HttpServletRequest request, String name) throws Exception {
 
         //Buscar o cookie no front
-        return WebUtils.getCookie(request, name);
+        Cookie cookie=  WebUtils.getCookie(request, name);
+        if (cookie != null) {
+            return cookie;
+        }
+        throw new Exception("Cookie não encontrado");
+
     }
 }

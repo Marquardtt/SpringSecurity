@@ -27,11 +27,17 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
     private AutenticacaoService autenticacaoService;
     @Override
     //Filtro que intercepta todas as requisições
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException{
         if(!rotaPublica(request)){
-            //Coloca o cookie capturado em uma variavel Cookie
-            Cookie cookie = cookieUtil.getCookie(request, "JWT");
-
+            Cookie cookie;
+            try {
+                //Coloca o cookie capturado em uma variavel Cookie
+                cookie = cookieUtil.getCookie(request, "JWT");
+            }catch (Exception e){
+                //Se não tiver o cookie, a requisição é negada
+                response.sendError(401);
+                return;
+            }
             //Pega o token do cookie
             String token = cookie.getValue();
 
@@ -52,6 +58,10 @@ public class FiltroAutenticacao extends OncePerRequestFilter {
 
         //Salva o contexto no banco de dados
         securityContextRepository.saveContext(context, request, response);
+
+        //Renovar JWT e Cookie
+        Cookie newCookie = cookieUtil.gerarCookieJWT(userDetails);
+        response.addCookie(newCookie);
     }
         //Continuação da requisição
         filterChain.doFilter(request, response);
