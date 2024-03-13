@@ -18,9 +18,17 @@ public class DatabaseConfig {
     @PostConstruct
     //Cria um usuário com as informações para que ele seja criado
     public void init(){
+
+        //Cria um objeto de usuário
         Usuario usuario = new Usuario();
+
+        //Seta as informações do usuário
         usuario.setUsername("Teste");
+
+        //Cria um objeto de UserDetailsEntity
         usuario.setUsuarioDetailsEntity(
+
+                //Seta as informações do UserDetailsEntity
                 UsuarioDetailsEntity.builder()
                         .usuario(usuario)
                         .enabled(true)
@@ -28,9 +36,13 @@ public class DatabaseConfig {
                         .accountNonLocked(true)
                         .credentialsNonExpired(true)
                         .username("teste@gmail.com")
+
                         //Faz a encriptação da senha
                         .password(new BCryptPasswordEncoder().encode("teste123"))
+
+                        //Seta as autorizações do usuário
                         .authorities(List.of(Autorizacao.GET))
+
                         .build());
         usuarioRepository.save(usuario);
     }

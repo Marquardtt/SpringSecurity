@@ -18,8 +18,12 @@ public class SecurityController {
 
     @GetMapping
     public String teste(){
+
+        //Pega o usuário autenticado
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         System.out.println(auth.getPrincipal());
+
         return "Teste " + auth.getName() + "!";
     }
 
@@ -32,4 +36,6 @@ public class SecurityController {
     public void cadastroUsuario(@RequestBody Usuario usuario){
         usuarioRepository.save(usuario);
     }
+
+
 }
